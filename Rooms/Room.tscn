@@ -1,21 +1,8 @@
 [gd_scene format=3 uid="uid://d3t7bqccju6gy"]
 
 [ext_resource type="Script" uid="uid://cb44d8w04ywub" path="res://Rooms/Room.gd" id="1_b6t71"]
-[ext_resource type="Texture2D" uid="uid://d32kh4i2r2qti" path="res://Assets/placeholder_tiles.png" id="1_pchdy"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y2qlv"]
-texture = ExtResource("1_pchdy")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:1/0 = 0
-0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
-
-[sub_resource type="TileSet" id="TileSet_pchdy"]
-tile_size = Vector2i(32, 32)
-physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 2
-sources/1 = SubResource("TileSetAtlasSource_y2qlv")
+[ext_resource type="TileSet" uid="uid://dtdhi6w0s44ca" path="res://Rooms/Room_Tile_Set.tres" id="1_pchdy"]
 
 [node name="Room" type="TileMapLayer" unique_id=2107985366]
-tile_set = SubResource("TileSet_pchdy")
+tile_set = ExtResource("1_pchdy")
 script = ExtResource("1_b6t71")

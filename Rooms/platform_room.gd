@@ -1,5 +1,7 @@
 extends Room
 
+signal move_to_train(train)
+
 var transition_list:Array = [null,[],[],[],[]]
 
 func _ready() -> void:
@@ -31,3 +33,16 @@ func toggle_gate(make_open:bool, platform_num:int, train:Array=[]):
 		set_cell(Vector2(x_pos,y_pos+tile),SOURCE_ID,atlas_coord)
 	
 	transition_list[platform_num] = train
+
+
+func _on_door_1_body_entered(_body: Node2D) -> void:
+	move_to_train.emit(transition_list[1])
+
+func _on_door_2_body_entered(_body: Node2D) -> void:
+	move_to_train.emit(transition_list[2])
+
+func _on_door_3_body_entered(_body: Node2D) -> void:
+	move_to_train.emit(transition_list[3])
+
+func _on_door_4_body_entered(_body: Node2D) -> void:
+	move_to_train.emit(transition_list[4])

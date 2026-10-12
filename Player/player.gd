@@ -14,11 +14,15 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 func get_station_number() -> int:
-	return location[0].split("-")[2]
+	#print(location)
+	return int(location[0].split("-")[2])
 
 func get_platform_name() -> String:
 	return location[0]
 
 func get_line_name() -> String:
-	return location[0].substr(0,location[0].size()-2)
+	return location[0].substr(0,location[0].length()-2)
 	
+func set_location(new_loc:Array) -> void:
+	print("[player] old location = ",location," new location = ", new_loc)
+	location = new_loc

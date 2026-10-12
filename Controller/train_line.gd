@@ -1,22 +1,22 @@
 class_name Train_Line
 
-signal move_by_train(new_pos:String)
+signal move_by_train(new_loc:Array)
 
 var name:String
 var size:int
 var transfer_list:Array[String] = []
-# Train notation: [position, movement, has_player]
+# Train notation: [position, movement, has_player, train_line_name]
 var train_list:Array = []
 
 func init(s:int, n:String) -> void:
 	name = n
 	size = s
-	for t in size:
+	for t in size + 1:
 		transfer_list.append("None")
 	
 	#Start trains at opposite ends
-	train_list.append([0,1,false])
-	train_list.append([size,-1,false])
+	train_list.append([1,1,false,name])
+	train_list.append([size+1,-1,false,name])
 
 # Pos is 1-indexed, to use the actual station numbers
 func add_transfer(pos:int, transfer_name:String) -> void:
@@ -25,6 +25,7 @@ func add_transfer(pos:int, transfer_name:String) -> void:
 
 func check_for_train(pos:int) -> Array:
 	var out_list = []
+	#print("[train line] Pos = ",pos," and train_list = ",train_list)
 	for train in train_list:
 		if train[0] == pos:
 			out_list.append(train)
@@ -45,9 +46,15 @@ func player_disembark():
 		train[2] = false
 
 func move_trains():
+	#print("[train line] Moving trains")
 	for train in train_list:
+		# Move train, turning around if needed
 		train[0] += train[1]
-		if train[0] == 0 or train[0] == size:
+		if train[0] == 1 or train[0] == size:
 			train[1] *= -1
+		
+		# If player on board
+		#print("[train line] has_player = ",train[2])
 		if train[2]:
-			move_by_train.emit(name+"-"+str(train[0]))
+			#print("[train line] emitting signal")
+			move_by_train.emit([name+"-"+str(train[0]),train[1]])

@@ -13,6 +13,7 @@ func clear_transitions() -> void:
 	toggle_gate(false,true)
 
 func move_stations(new_station:int,next_station:int):
+	#print("[train room] move stations")
 	current_station_num = new_station
 	$Label.text = "Current Station:\n"+str(new_station)+"\nNext Station:"+str(next_station)
 
@@ -29,5 +30,6 @@ func toggle_gate(make_open:bool, is_left:bool, station:String=""):
 	
 	#transition_list[platform_num] = train
 
-func _on_either_door_body_entered(body: Node2D) -> void:
+func _on_either_door_body_entered(_body: Node2D) -> void:
+	print("[train room] exit door entered")
 	move_player_platform.emit(line_name +"-"+ str(current_station_num))

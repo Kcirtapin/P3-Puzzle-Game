@@ -88,3 +88,8 @@ offset_top = 519.0
 offset_right = 651.0
 offset_bottom = 542.0
 text = "Platform 4"
+
+[connection signal="body_entered" from="Door1" to="." method="_on_door_1_body_entered"]
+[connection signal="body_entered" from="Door2" to="." method="_on_door_2_body_entered"]
+[connection signal="body_entered" from="Door3" to="." method="_on_door_3_body_entered"]
+[connection signal="body_entered" from="Door4" to="." method="_on_door_4_body_entered"]

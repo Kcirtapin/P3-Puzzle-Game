@@ -10,6 +10,8 @@ enum color_to_size {GREEN=5,BLUE=6,RED=7,BLACK=8}
 @onready var player:Player = $Player
 var room:Room = null
 
+var win_con:bool = false
+
 var subway_map:Dictionary[String,Train_Line] = {}
 var goal_location:String = ""
 var time_elapsed:int = 0
@@ -47,20 +49,33 @@ func generate_map() -> void:
 			elif line.split("-")[0] == "Black":
 				line_size = color_to_size.BLACK
 			new_line.init(line_size, line)
-			var transfer_location:int = 2
+			var transfer_location:int = 1
 			if line.split("-")[1] == "O":
-				transfer_location = 3
+				transfer_location = 2
 			for transfer in PREGEN_TRANSFER_DATA.get(line):
 				new_line.add_transfer(transfer_location,transfer)
 				transfer_location += 2
 			subway_map.set(line,new_line)
 			
 		player.location = ["Green-X-1",0]
-		goal_location = "Green-O-5"
+		#goal_location = "Green-O-5"
+		goal_location = "Red-O-4"
 
 func check_platform_for_train() -> void:
-	subway_map.get(player.get_line_name()).check_for_train(player.get_station_number())
-	pass
+	if not(player.on_train):
+		#print("[main] On platform, looking for trains")
+		# Finds the train line and checks for trains at the current station
+		var train_line:Train_Line = subway_map.get(player.get_line_name())
+		var trains:Array = train_line.check_for_train(player.get_station_number())
+		# Checks if there is another line that could have a train here
+		if train_line.transfer_list[player.get_station_number()] != "None":
+			print(subway_map.get(train_line.transfer_list[player.get_station_number()].substr(0,train_line.transfer_list[player.get_station_number()].length()-2)).check_for_train(int(train_line.transfer_list[player.get_station_number()].substr(train_line.transfer_list[player.get_station_number()].length()-1))))
+			for train in subway_map.get(train_line.transfer_list[player.get_station_number()].substr(0,train_line.transfer_list[player.get_station_number()].length()-2)).check_for_train(int(train_line.transfer_list[player.get_station_number()].substr(train_line.transfer_list[player.get_station_number()].length()-1))):
+				trains.append(train)
+		#print("[main] Train list:",trains)
+		for train in trains:
+			room.add_train(train)
+	
 
 func game_over() -> void:
 	print("You were late. You lose")
@@ -68,26 +83,60 @@ func game_over() -> void:
 
 func game_won() -> void:
 	print("You made it! You win!")
-	get_tree().quit()
+	win_con = true
+	#get_tree().quit()
 
 func _on_minute_timer_timeout() -> void:
+	if win_con:
+		get_tree().quit()
 	time_elapsed += 1
 	if time_elapsed == TIME_LIMIT:
 		game_over()
 	for line in subway_map.values():
 		line.move_trains()
 	room.clear_transitions()
+	if player.on_train:
+		room.move_stations(player.get_station_number(),player.get_station_number() + player.location[1])
+		room.toggle_gate(true,true)
+	else:
+		check_platform_for_train()
+	#print(player.location)
+
+func change_room_train(train:Array):
+	if room != null:
+		room.queue_free()
+	var train_line:Train_Line = subway_map.get(train[3])
+	player.location = [train_line.name+"-"+str(train[0]),train[1]]
+	player.on_train = true
+	#train_line.move_by_train.connect(change_room_platform)
+	train_line.player_embark(player.get_station_number(),train[1] == 1)
+	train_line.move_by_train.connect(player.set_location)
+	room = train_room.instantiate()
+	call_deferred("add_child",room)
+	room.z_index = -1
+	player.position = room.player_start_position
+	room.set_line_name(player.get_line_name())
+	room.move_stations(player.get_station_number(),player.get_station_number() + train[1])
+	room.move_player_platform.connect(change_room_platform)
 
 func change_room_platform(dest:String) -> void:
+	if room != null:
+		subway_map.get(room.line_name).player_disembark()
+		room.queue_free()
+	
 	if dest == goal_location:
 		game_won()
 	room = platform_room.instantiate()
 	add_child(room)
+	room.move_to_train.connect(change_room_train)
 	room.z_index = -1
 	player.position = room.player_start_position
+	player.on_train = false
+	check_platform_for_train()
 
 func _on_start_button_pressed() -> void:
 	$Button.queue_free()
+	$MinuteTimer.start()
 	player.visible = true
 	change_room_platform(player.location[0])
 	

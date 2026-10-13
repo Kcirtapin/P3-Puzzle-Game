@@ -3,6 +3,7 @@ extends Room
 signal move_to_train(train)
 
 var transition_list:Array = [null,[],[],[],[]]
+@onready var label_list:Array = [null,$Platform1,$Platform2,$Platform3,$Platform4]
 
 func _ready() -> void:
 	player_start_position = Vector2(300,350)
@@ -33,7 +34,18 @@ func toggle_gate(make_open:bool, platform_num:int, train:Array=[]):
 		set_cell(Vector2(x_pos,y_pos+tile),SOURCE_ID,atlas_coord)
 	
 	transition_list[platform_num] = train
+	change_platform_label(platform_num,train)
 
+func change_platform_label(plat:int,train:Array=[]) -> void:
+	if plat >= 1 and plat <= 4:
+		if train == []:
+			label_list[plat].text = "Platform " + str(plat)
+		else:
+			if train[1] == 1:
+				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + " Line train\nAscending station order"
+			else:
+				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + " Line train\nDescending station order"
+	pass
 
 func _on_door_1_body_entered(_body: Node2D) -> void:
 	move_to_train.emit(transition_list[1])

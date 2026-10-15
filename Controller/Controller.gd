@@ -33,6 +33,8 @@ const TIME_LIMIT = 40
 func _ready() -> void:
 	generate_map()
 
+# Populates subway map with the necessary TrainLines
+# Adds relevant transfers to all TrainLines
 func generate_map() -> void:
 	subway_map = {}
 	player.on_train = false
@@ -61,6 +63,8 @@ func generate_map() -> void:
 		#goal_location = "Green-O-5"
 		goal_location = "Red-O-4"
 
+# Determines how many and which trains are at the player's platform
+# Adds those trains to the room
 func check_platform_for_train() -> void:
 	if not(player.on_train):
 		#print("[main] On platform, looking for trains")
@@ -69,23 +73,26 @@ func check_platform_for_train() -> void:
 		var trains:Array = train_line.check_for_train(player.get_station_number())
 		# Checks if there is another line that could have a train here
 		if train_line.transfer_list[player.get_station_number()] != "None":
-			print(subway_map.get(train_line.transfer_list[player.get_station_number()].substr(0,train_line.transfer_list[player.get_station_number()].length()-2)).check_for_train(int(train_line.transfer_list[player.get_station_number()].substr(train_line.transfer_list[player.get_station_number()].length()-1))))
+			#print(subway_map.get(train_line.transfer_list[player.get_station_number()].substr(0,train_line.transfer_list[player.get_station_number()].length()-2)).check_for_train(int(train_line.transfer_list[player.get_station_number()].substr(train_line.transfer_list[player.get_station_number()].length()-1))))
 			for train in subway_map.get(train_line.transfer_list[player.get_station_number()].substr(0,train_line.transfer_list[player.get_station_number()].length()-2)).check_for_train(int(train_line.transfer_list[player.get_station_number()].substr(train_line.transfer_list[player.get_station_number()].length()-1))):
 				trains.append(train)
 		#print("[main] Train list:",trains)
 		for train in trains:
 			room.add_train(train)
 	
-
+# Ends the game as a loss
 func game_over() -> void:
 	print("You were late. You lose")
 	get_tree().quit()
 
+# Ends the game as a victory
 func game_won() -> void:
 	print("You made it! You win!")
 	win_con = true
 	#get_tree().quit()
 
+# Updates the room based on the room type.
+# Updates the time limit counter
 func _on_minute_timer_timeout() -> void:
 	if win_con:
 		get_tree().quit()
@@ -102,6 +109,7 @@ func _on_minute_timer_timeout() -> void:
 		check_platform_for_train()
 	#print(player.location)
 
+# Changes the room to a TrainRoom, specifically the one passed.
 func change_room_train(train:Array):
 	if room != null:
 		room.queue_free()

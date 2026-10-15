@@ -42,10 +42,9 @@ func change_platform_label(plat:int,train:Array=[]) -> void:
 			label_list[plat].text = "Platform " + str(plat)
 		else:
 			if train[1] == 1:
-				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + " Line train\nAscending station order"
+				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + "-" +train[3].split("-")[1]+ " Line train\nAscending station order"
 			else:
-				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + " Line train\nDescending station order"
-	pass
+				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + "-" +train[3].split("-")[1]+ " Line train\nDescending station order"
 
 func _on_door_1_body_entered(_body: Node2D) -> void:
 	move_to_train.emit(transition_list[1])

@@ -26,6 +26,11 @@ const PREGEN_TRANSFER_DATA:Dictionary = {
 	"Black-O":["Black-X-6","Red-X-4", "Green-X-4"],
 	"Blue-O":["Red-X-6","Black-X-4"]
 	}
+const PREGEN_MAP_DATA_2:Array = ["Green-X"]
+const PREGEN_TRANSFER_DATA_2:Dictionary = {
+	"Green-X":[]
+	}
+
 const USE_PREGEN:bool = true
 const TIME_LIMIT = 40
 
@@ -59,7 +64,7 @@ func generate_map() -> void:
 				transfer_location += 2
 			subway_map.set(line,new_line)
 			
-		player.location = ["Green-X-1",0]
+		player.set_location_platform("Green-X-1")
 		#goal_location = "Green-O-5"
 		goal_location = "Red-O-4"
 
@@ -103,29 +108,28 @@ func _on_minute_timer_timeout() -> void:
 		line.move_trains()
 	room.clear_transitions()
 	if player.on_train:
-		room.move_stations(player.get_station_number(),player.get_station_number() + player.location[1])
+		room.move_stations(player.get_station_number(),player.get_station_number() + player.direction)
 		room.toggle_gate(true,true)
 	else:
 		check_platform_for_train()
 	#print(player.location)
 
 # Changes the room to a TrainRoom, specifically the one passed.
-func change_room_train(train:Array):
+func change_room_train(train:Train):
 	if room != null:
 		room.queue_free()
-	var train_line:Train_Line = subway_map.get(train[3])
-	player.location = [train_line.name+"-"+str(train[0]),train[1]]
+	var train_line:Train_Line = subway_map.get(train.train_line_name)
+	player.set_location_train(train)
 	player.on_train = true
-	#train_line.move_by_train.connect(change_room_platform)
-	train_line.player_embark(player.get_station_number(),train[1] == 1)
-	train_line.move_by_train.connect(player.set_location)
+	train_line.player_embark(player.get_station_number(),train.movement_increment == 1)
+	train_line.player_train_moved.connect(player.set_location_train)
 	room = train_room.instantiate()
 	call_deferred("add_child",room)
 	room.z_index = -1
 	player.position = room.player_start_position
 	room.set_line_name(player.get_line_name())
-	room.move_stations(player.get_station_number(),player.get_station_number() + train[1])
-	room.move_player_platform.connect(change_room_platform)
+	room.move_stations(player.get_station_number(),player.get_station_number() + train.movement_increment)
+	room.move_to_platform.connect(change_room_platform)
 
 func change_room_platform(dest:String) -> void:
 	if room != null:
@@ -135,6 +139,7 @@ func change_room_platform(dest:String) -> void:
 	if dest == goal_location:
 		game_won()
 	room = platform_room.instantiate()
+	#call_deferred("add_child",room)
 	add_child(room)
 	room.move_to_train.connect(change_room_train)
 	room.z_index = -1

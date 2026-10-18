@@ -2,25 +2,25 @@ extends Room
 
 signal move_to_train(train)
 
-var transition_list:Array = [null,[],[],[],[]]
+var transition_list:Array = [null,null,null,null,null]
 @onready var label_list:Array = [null,$Platform1,$Platform2,$Platform3,$Platform4]
 
 func _ready() -> void:
 	player_start_position = Vector2(300,350)
 
-func add_train(train:Array) -> void:
+func add_train(train:Train) -> void:
 	var platform:int = 1
-	while platform < 4 and transition_list[platform] != []:
+	while platform < 4 and transition_list[platform] != null:
 		platform += 1
 	toggle_gate(true,platform,train)
 	pass
 
 func clear_transitions() -> void:
 	for platform in range(1,transition_list.size()):
-		if transition_list[platform] != []:
+		if transition_list[platform] != null:
 			toggle_gate(false,platform)
 
-func toggle_gate(make_open:bool, platform_num:int, train:Array=[]):
+func toggle_gate(make_open:bool, platform_num:int, train:Train=null):
 	var x_pos:int = 16
 	var y_pos:int = 15
 	if platform_num%2 == 1:
@@ -36,15 +36,15 @@ func toggle_gate(make_open:bool, platform_num:int, train:Array=[]):
 	transition_list[platform_num] = train
 	change_platform_label(platform_num,train)
 
-func change_platform_label(plat:int,train:Array=[]) -> void:
+func change_platform_label(plat:int,train:Train=null) -> void:
 	if plat >= 1 and plat <= 4:
-		if train == []:
+		if train == null:
 			label_list[plat].text = "Platform " + str(plat)
 		else:
-			if train[1] == 1:
-				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + "-" +train[3].split("-")[1]+ " Line train\nAscending station order"
+			if train.movement_increment == 1:
+				label_list[plat].text = "Platform " + str(plat) + "\n" + train.train_line_name.split("-")[0] + "-" +train.train_line_name.split("-")[1]+ " Line train\nAscending station order"
 			else:
-				label_list[plat].text = "Platform " + str(plat) + "\n" + train[3].split("-")[0] + "-" +train[3].split("-")[1]+ " Line train\nDescending station order"
+				label_list[plat].text = "Platform " + str(plat) + "\n" + train.train_line_name.split("-")[0] + "-" +train.train_line_name.split("-")[1]+ " Line train\nDescending station order"
 
 func _on_door_1_body_entered(_body: Node2D) -> void:
 	move_to_train.emit(transition_list[1])

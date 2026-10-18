@@ -1,6 +1,6 @@
 extends Room
 
-signal move_player_platform(dest:String)
+signal move_to_platform(dest:String)
 
 var line_name:String
 var current_station_num:int
@@ -32,4 +32,4 @@ func toggle_gate(make_open:bool, is_left:bool, station:String=""):
 
 func _on_either_door_body_entered(_body: Node2D) -> void:
 	print("[train room] exit door entered")
-	move_player_platform.emit(line_name +"-"+ str(current_station_num))
+	move_to_platform.emit(line_name +"-"+ str(current_station_num))

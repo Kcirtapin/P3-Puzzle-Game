@@ -8,6 +8,9 @@ enum color_to_size {GREEN=5,BLUE=6,RED=7,BLACK=8}
 @export var platform_room:PackedScene
 
 @onready var player:Player = $Player
+@onready var hud:Hud = $HUD
+@onready var timer:Timer = $MinuteTimer
+
 var room:Room = null
 
 var win_con:bool = false
@@ -38,6 +41,9 @@ const TIME_LIMIT = 40
 func _ready() -> void:
 	generate_map()
 
+func _process(delta: float) -> void:
+	hud.set_second_time(timer.time_left)
+
 # Populates subway map with the necessary TrainLines
 # Adds relevant transfers to all TrainLines
 func generate_map() -> void:
@@ -67,6 +73,7 @@ func generate_map() -> void:
 		player.set_location_platform("Green-X-1")
 		#goal_location = "Green-O-5"
 		goal_location = "Red-O-4"
+		hud.set_goal(goal_location)
 
 # Determines how many and which trains are at the player's platform
 # Adds those trains to the room
@@ -102,6 +109,8 @@ func _on_minute_timer_timeout() -> void:
 	if win_con:
 		get_tree().quit()
 	time_elapsed += 1
+	hud.set_minute_time(time_elapsed)
+	hud.set_second_time(int(timer.time_left))
 	if time_elapsed == TIME_LIMIT:
 		game_over()
 	for line in subway_map.values():

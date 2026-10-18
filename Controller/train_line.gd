@@ -46,11 +46,11 @@ func player_disembark():
 		train.has_player = false
 
 func move_trains():
-	print("[train line] Moving trains")
+	#print("[train line] Moving trains")
 	for train in train_list:
 		# Move train, turning around if needed
 		train.move_train()
-		print("[train line] train ", train.train_line_name, " has finished moving to ",train.position,)
+		#print("[train line] train ", train.train_line_name, " has finished moving to ",train.position,)
 		if train.position == 1 or train.position == size:
 			train.turn_train_around()
 		

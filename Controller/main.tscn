@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://hd6nx847nbvh" path="res://Assets/icon.svg" id="2_6j33k"]
 [ext_resource type="PackedScene" uid="uid://ipntnb0muxut" path="res://Rooms/Train_Room.tscn" id="2_kgyre"]
 [ext_resource type="PackedScene" uid="uid://brvd7t7ksrdwu" path="res://Rooms/platform_room.tscn" id="3_shc1m"]
+[ext_resource type="PackedScene" uid="uid://ds5t7ub4lhq68" path="res://Controller/hud.tscn" id="6_shc1m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ojnr2"]
 size = Vector2(20.5, 20.5)
@@ -41,6 +42,8 @@ shape = SubResource("RectangleShape2D_ojnr2")
 
 [node name="MinuteTimer" type="Timer" parent="." unique_id=925266735]
 wait_time = 5.0
+
+[node name="HUD" parent="." unique_id=1134532287 instance=ExtResource("6_shc1m")]
 
 [connection signal="pressed" from="Button" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MinuteTimer" to="." method="_on_minute_timer_timeout"]

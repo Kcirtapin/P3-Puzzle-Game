@@ -94,20 +94,15 @@ func check_platform_for_train() -> void:
 	
 # Ends the game as a loss
 func game_over() -> void:
-	print("You were late. You lose")
-	get_tree().quit()
+	hud.end_game(false)
 
 # Ends the game as a victory
 func game_won() -> void:
-	print("You made it! You win!")
-	win_con = true
-	#get_tree().quit()
+	hud.end_game(true)
 
 # Updates the room based on the room type.
 # Updates the time limit counter
 func _on_minute_timer_timeout() -> void:
-	if win_con:
-		get_tree().quit()
 	time_elapsed += 1
 	hud.set_minute_time(time_elapsed)
 	hud.set_second_time(int(timer.time_left))

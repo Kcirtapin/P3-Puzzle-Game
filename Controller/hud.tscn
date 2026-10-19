@@ -20,3 +20,21 @@ text = "Time: 8:00am"
 [node name="Second_Time_Label" type="Label" parent="VBoxContainer" unique_id=1266611898]
 layout_mode = 2
 text = "5s"
+
+[node name="End_Container" type="VBoxContainer" parent="." unique_id=606864183]
+visible = false
+offset_left = 345.0
+offset_top = 169.0
+offset_right = 385.0
+offset_bottom = 209.0
+
+[node name="End_Label" type="Label" parent="End_Container" unique_id=1184634722]
+layout_mode = 2
+text = "You were late...
+You lose"
+
+[node name="Exit_Button" type="Button" parent="End_Container" unique_id=737838262]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="End_Container/Exit_Button" to="." method="_on_exit_button_pressed"]

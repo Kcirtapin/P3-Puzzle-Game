@@ -13,3 +13,12 @@ func set_second_time(s_time:int) -> void:
 
 func set_goal(platform_name:String):
 	goal_label.text = "Goal Station: " + str(platform_name)
+
+func end_game(is_win:bool) -> void:
+	$End_Container.visible = true
+	if is_win:
+		$End_Container/End_Label.text = "You made it!\nYou win!"
+
+
+func _on_exit_button_pressed() -> void:
+	get_tree().quit()

@@ -36,5 +36,5 @@ func toggle_gate(make_open:bool, is_left:bool, station:String=""):
 	#transition_list[platform_num] = train
 
 func _on_either_door_body_entered(_body: Node2D) -> void:
-	print("[train room] exit door entered")
+	#print("[train room] exit door entered")
 	move_to_platform.emit(line_name +"-"+ str(current_station_num))

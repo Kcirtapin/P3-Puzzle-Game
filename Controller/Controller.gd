@@ -152,6 +152,7 @@ func change_room_platform(dest:String) -> void:
 	room.z_index = -1
 	player.position = room.player_start_position
 	player.on_train = false
+	room.update_transfer_label(subway_map.get(player.get_line_name()),player.get_station_number())
 	check_platform_for_train()
 
 func _on_start_button_pressed() -> void:

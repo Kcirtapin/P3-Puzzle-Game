@@ -93,6 +93,22 @@ text = "Platform 4"
 [node name="Crowd" parent="." unique_id=1333625192 instance=ExtResource("3_63mkv")]
 position = Vector2(172, 96)
 
+[node name="Transfer_Label" type="Label" parent="." unique_id=1843474852]
+offset_left = -57.0
+offset_top = 259.0
+offset_right = 44.0
+offset_bottom = 334.0
+text = "Transfer List:
+Red-Y
+Green-Y"
+
+[node name="Station_Label" type="Label" parent="." unique_id=1079076845]
+offset_left = 103.0
+offset_top = 9.0
+offset_right = 231.0
+offset_bottom = 32.0
+text = "Current Station: Green-Y-10"
+
 [connection signal="body_entered" from="Door1" to="." method="_on_door_1_body_entered"]
 [connection signal="body_entered" from="Door2" to="." method="_on_door_2_body_entered"]
 [connection signal="body_entered" from="Door3" to="." method="_on_door_3_body_entered"]

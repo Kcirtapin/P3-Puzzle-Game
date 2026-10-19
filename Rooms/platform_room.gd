@@ -46,6 +46,14 @@ func change_platform_label(plat:int,train:Train=null) -> void:
 			else:
 				label_list[plat].text = "Platform " + str(plat) + "\n" + train.train_line_name.split("-")[0] + "-" +train.train_line_name.split("-")[1]+ " Line train\nDescending station order"
 
+func update_transfer_label(train_line:Train_Line,pos:int) -> void:
+	$Station_Label.text = "Current Station: " + train_line.name + "-" + str(pos)
+	var t_list:String = "Transfer List:\n" + train_line.name
+	if train_line.transfer_list[pos] != "None":
+		var temp_str_list := train_line.transfer_list[pos].split("-")
+		t_list += "\n" + temp_str_list[0] + "-" + temp_str_list[1]
+	$Transfer_Label.text = t_list
+
 func _on_door_1_body_entered(_body: Node2D) -> void:
 	move_to_train.emit(transition_list[1])
 

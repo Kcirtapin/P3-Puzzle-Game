@@ -4,16 +4,18 @@ signal move_to_train(train)
 
 var transition_list:Array = [null,null,null,null,null]
 @onready var label_list:Array = [null,$Platform1,$Platform2,$Platform3,$Platform4]
+@onready var crowd1:Crowd = $Crowd1
+
 
 func _ready() -> void:
 	player_start_position = Vector2(300,350)
+	crowd1.start_path(Vector2(170,100),Vector2(170,560))
 
 func add_train(train:Train) -> void:
-	var platform:int = 1
-	while platform < 4 and transition_list[platform] != null:
-		platform += 1
+	var platform:int = randi_range(1,4)
+	while transition_list[platform] != null:
+		platform = randi_range(1,4)
 	toggle_gate(true,platform,train)
-	pass
 
 func clear_transitions() -> void:
 	for platform in range(1,transition_list.size()):

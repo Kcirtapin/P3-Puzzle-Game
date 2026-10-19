@@ -35,7 +35,7 @@ const PREGEN_TRANSFER_DATA_2:Dictionary = {
 	}
 
 const USE_PREGEN:bool = true
-const TIME_LIMIT = 40
+const TIME_LIMIT = 45
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -2,6 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://dtdhi6w0s44ca" path="res://Rooms/Room_Tile_Set.tres" id="1_1w2gu"]
 [ext_resource type="Script" uid="uid://cjj7ov021os22" path="res://Rooms/platform_room.gd" id="1_p2a47"]
+[ext_resource type="PackedScene" uid="uid://doo1yjkr25es7" path="res://Rooms/crowd.tscn" id="3_63mkv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1w2gu"]
 size = Vector2(28, 93.75)
@@ -88,6 +89,9 @@ offset_top = 519.0
 offset_right = 651.0
 offset_bottom = 542.0
 text = "Platform 4"
+
+[node name="Crowd" parent="." unique_id=1333625192 instance=ExtResource("3_63mkv")]
+position = Vector2(172, 96)
 
 [connection signal="body_entered" from="Door1" to="." method="_on_door_1_body_entered"]
 [connection signal="body_entered" from="Door2" to="." method="_on_door_2_body_entered"]

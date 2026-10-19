@@ -118,7 +118,10 @@ func _on_minute_timer_timeout() -> void:
 	room.clear_transitions()
 	if player.on_train:
 		room.move_stations(player.get_station_number(),player.get_station_number() + player.direction)
-		room.toggle_gate(true,true)
+		if randi() % 2 == 0:
+			room.toggle_gate(true,true)
+		else:
+			room.toggle_gate(true,false)
 	else:
 		check_platform_for_train()
 	#print(player.location)
@@ -158,6 +161,7 @@ func change_room_platform(dest:String) -> void:
 
 func _on_start_button_pressed() -> void:
 	$Button.queue_free()
+	$HTPLabel.queue_free()
 	$MinuteTimer.start()
 	player.visible = true
 	change_room_platform(player.location[0])

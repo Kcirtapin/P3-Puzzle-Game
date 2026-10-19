@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://doo1yjkr25es7"]
+
+[ext_resource type="Script" uid="uid://kqidul0vi4cf" path="res://Rooms/crowd.gd" id="1_b81rd"]
+[ext_resource type="Texture2D" uid="uid://b6l6ymu5g5pwb" path="res://Assets/Crowd.jpg" id="1_gnnbn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ojnr2"]
+size = Vector2(100, 42)
+
+[node name="Crowd" type="RigidBody2D" unique_id=2016811910]
+collision_mask = 2
+gravity_scale = 0.0
+script = ExtResource("1_b81rd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1474425849]
+shape = SubResource("RectangleShape2D_ojnr2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=460784518]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_gnnbn")

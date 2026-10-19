@@ -45,5 +45,19 @@ wait_time = 5.0
 
 [node name="HUD" parent="." unique_id=1134532287 instance=ExtResource("6_shc1m")]
 
+[node name="HTPLabel" type="Label" parent="." unique_id=1619976137]
+offset_left = -539.0
+offset_top = -121.0
+offset_right = -47.0
+offset_bottom = 84.0
+text = "How to Play:
+You are trying to travel the subway without a map
+You have 45 minutes to get to your goal
+Each minute is 5 seconds
+Each train moves one platform per minute
+There are consistent rules regarding how the train map is made
+Try and figure them out!
+Currently only one map, but will add random generation later"
+
 [connection signal="pressed" from="Button" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MinuteTimer" to="." method="_on_minute_timer_timeout"]

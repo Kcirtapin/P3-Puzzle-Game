@@ -158,6 +158,7 @@ func _on_start_button_pressed() -> void:
 	$Button.queue_free()
 	$HTPLabel.queue_free()
 	$MinuteTimer.start()
+	$BGM_Player.play()
 	player.visible = true
 	change_room_platform(player.location[0])
 	

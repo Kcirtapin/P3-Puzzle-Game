@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ipntnb0muxut" path="res://Rooms/Train_Room.tscn" id="2_kgyre"]
 [ext_resource type="PackedScene" uid="uid://brvd7t7ksrdwu" path="res://Rooms/platform_room.tscn" id="3_shc1m"]
 [ext_resource type="PackedScene" uid="uid://ds5t7ub4lhq68" path="res://Controller/hud.tscn" id="6_shc1m"]
+[ext_resource type="AudioStream" uid="uid://qihso6mensmf" path="res://Assets/BGM1_Mindustry.mp3" id="7_1bp5w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ojnr2"]
 size = Vector2(20.5, 20.5)
@@ -58,6 +59,10 @@ Each train moves one platform per minute
 There are consistent rules regarding how the train map is made
 Try and figure them out!
 Currently only one map, but will add random generation later"
+
+[node name="BGM_Player" type="AudioStreamPlayer" parent="." unique_id=1770641601]
+stream = ExtResource("7_1bp5w")
+parameters/looping = true
 
 [connection signal="pressed" from="Button" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MinuteTimer" to="." method="_on_minute_timer_timeout"]

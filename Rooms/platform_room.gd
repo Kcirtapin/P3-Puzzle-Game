@@ -5,11 +5,13 @@ signal move_to_train(train)
 var transition_list:Array = [null,null,null,null,null]
 @onready var label_list:Array = [null,$Platform1,$Platform2,$Platform3,$Platform4]
 @onready var crowd1:Crowd = $Crowd1
+@onready var crowd2:Crowd = $Crowd2
 
 
 func _ready() -> void:
 	player_start_position = Vector2(300,350)
 	crowd1.start_path(Vector2(170,100),Vector2(170,560))
+	crowd2.start_path(Vector2(430,100),Vector2(430,560))
 
 func add_train(train:Train) -> void:
 	var platform:int = randi_range(1,4)

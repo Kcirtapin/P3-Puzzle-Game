@@ -71,8 +71,8 @@ func generate_map() -> void:
 			subway_map.set(line,new_line)
 			
 		player.set_location_platform("Green-X-1")
-		#goal_location = "Green-O-5"
-		goal_location = "Red-O-4"
+		goal_location = "Green-O-5"
+		#goal_location = "Red-O-4"
 		hud.set_goal(goal_location)
 
 # Determines how many and which trains are at the player's platform

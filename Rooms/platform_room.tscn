@@ -110,6 +110,10 @@ text = "Current Station: Green-Y-10"
 position = Vector2(170, 100)
 auto_reverse = true
 
+[node name="Crowd2" parent="." unique_id=2016811910 instance=ExtResource("3_63mkv")]
+position = Vector2(430, 100)
+auto_reverse = true
+
 [connection signal="body_entered" from="Door1" to="." method="_on_door_1_body_entered"]
 [connection signal="body_entered" from="Door2" to="." method="_on_door_2_body_entered"]
 [connection signal="body_entered" from="Door3" to="." method="_on_door_3_body_entered"]

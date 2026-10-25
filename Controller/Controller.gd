@@ -47,33 +47,41 @@ func _process(delta: float) -> void:
 # Populates subway map with the necessary TrainLines
 # Adds relevant transfers to all TrainLines
 func generate_map() -> void:
+	var map_gen:MapGenerator = MapGenerator.new()
 	subway_map = {}
 	player.on_train = false
 	if USE_PREGEN:
-		for line in PREGEN_MAP_DATA:
-			var new_line = Train_Line.new()
-			var line_size: int = 0
-			if line.split("-")[0] == "Green":
-				line_size = color_to_size.GREEN
-			elif line.split("-")[0] == "Blue":
-				line_size = color_to_size.BLUE
-			elif line.split("-")[0] == "Red":
-				line_size = color_to_size.RED
-			elif line.split("-")[0] == "Black":
-				line_size = color_to_size.BLACK
-			new_line.init(line_size, line)
-			var transfer_location:int = 1
-			if line.split("-")[1] == "O":
-				transfer_location = 2
-			for transfer in PREGEN_TRANSFER_DATA.get(line):
-				new_line.add_transfer(transfer_location,transfer)
-				transfer_location += 2
-			subway_map.set(line,new_line)
+		subway_map = map_gen.generate_from_pregen(PREGEN_MAP_DATA,PREGEN_TRANSFER_DATA,"Green-X-1","Green-O-5")
+		#for line in PREGEN_MAP_DATA:
+			#var new_line = Train_Line.new()
+			#var line_size: int = 0
+			#if line.split("-")[0] == "Green":
+				#line_size = color_to_size.GREEN
+			#elif line.split("-")[0] == "Blue":
+				#line_size = color_to_size.BLUE
+			#elif line.split("-")[0] == "Red":
+				#line_size = color_to_size.RED
+			#elif line.split("-")[0] == "Black":
+				#line_size = color_to_size.BLACK
+			#new_line.init(line_size, line)
+			#var transfer_location:int = 1
+			#if line.split("-")[1] == "O":
+				#transfer_location = 2
+			#for transfer in PREGEN_TRANSFER_DATA.get(line):
+				#new_line.add_transfer(transfer_location,transfer)
+				#transfer_location += 2
+			#subway_map.set(line,new_line)
 			
-		player.set_location_platform("Green-X-1")
-		goal_location = "Green-O-5"
-		#goal_location = "Red-O-4"
-		hud.set_goal(goal_location)
+		#player.set_location_platform("Green-X-1")
+		#goal_location = "Green-O-5"
+		##goal_location = "Red-O-4"
+		#hud.set_goal(goal_location)
+	else:
+		subway_map = map_gen.generate()
+	
+	player.set_location_platform(map_gen.get_start_location())
+	goal_location = map_gen.get_goal_location()
+	hud.set_goal(goal_location)
 
 # Determines how many and which trains are at the player's platform
 # Adds those trains to the room

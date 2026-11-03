@@ -16,3 +16,6 @@ func move_train() -> void:
 
 func turn_train_around() -> void:
 	movement_increment *= -1
+
+func get_position_name() -> String:
+	return train_line_name + "-" + str(position)

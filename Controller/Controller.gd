@@ -34,7 +34,7 @@ const PREGEN_TRANSFER_DATA_2:Dictionary = {
 	"Green-X":[]
 	}
 
-const USE_PREGEN:bool = true
+const USE_PREGEN:bool = false
 const TIME_LIMIT = 45
 
 # Called when the node enters the scene tree for the first time.
@@ -52,30 +52,6 @@ func generate_map() -> void:
 	player.on_train = false
 	if USE_PREGEN:
 		subway_map = map_gen.generate_from_pregen(PREGEN_MAP_DATA,PREGEN_TRANSFER_DATA,"Green-X-1","Green-O-5")
-		#for line in PREGEN_MAP_DATA:
-			#var new_line = Train_Line.new()
-			#var line_size: int = 0
-			#if line.split("-")[0] == "Green":
-				#line_size = color_to_size.GREEN
-			#elif line.split("-")[0] == "Blue":
-				#line_size = color_to_size.BLUE
-			#elif line.split("-")[0] == "Red":
-				#line_size = color_to_size.RED
-			#elif line.split("-")[0] == "Black":
-				#line_size = color_to_size.BLACK
-			#new_line.init(line_size, line)
-			#var transfer_location:int = 1
-			#if line.split("-")[1] == "O":
-				#transfer_location = 2
-			#for transfer in PREGEN_TRANSFER_DATA.get(line):
-				#new_line.add_transfer(transfer_location,transfer)
-				#transfer_location += 2
-			#subway_map.set(line,new_line)
-			
-		#player.set_location_platform("Green-X-1")
-		#goal_location = "Green-O-5"
-		##goal_location = "Red-O-4"
-		#hud.set_goal(goal_location)
 	else:
 		subway_map = map_gen.generate()
 	

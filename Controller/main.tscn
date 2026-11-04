@@ -44,6 +44,9 @@ shape = SubResource("RectangleShape2D_ojnr2")
 [node name="MinuteTimer" type="Timer" parent="." unique_id=925266735]
 wait_time = 5.0
 
+[node name="GraceTimer" type="Timer" parent="." unique_id=1313140674]
+wait_time = 3.0
+
 [node name="HUD" parent="." unique_id=1134532287 instance=ExtResource("6_shc1m")]
 
 [node name="HTPLabel" type="Label" parent="." unique_id=1619976137]
@@ -66,3 +69,4 @@ parameters/looping = true
 
 [connection signal="pressed" from="Button" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MinuteTimer" to="." method="_on_minute_timer_timeout"]
+[connection signal="timeout" from="GraceTimer" to="." method="_on_grace_timer_timeout"]

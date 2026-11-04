@@ -8,7 +8,9 @@ class_name Hud
 func set_minute_time(m_time:int) -> void:
 	minute_label.text = "Time: " + str(m_time/60 + 8)+":%02dam" % [m_time%60]
 
-func set_second_time(s_time:int) -> void:
+func set_second_time(s_time:int,g_time:int,use_g_time:bool) -> void:
+	if use_g_time:
+		s_time += g_time
 	second_label.text = str(s_time) + "s"
 
 func set_goal(platform_name:String):

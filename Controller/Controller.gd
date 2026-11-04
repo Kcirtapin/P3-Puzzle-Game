@@ -10,6 +10,7 @@ enum color_to_size {GREEN=5,BLUE=6,RED=7,BLACK=8}
 @onready var player:Player = $Player
 @onready var hud:Hud = $HUD
 @onready var timer:Timer = $MinuteTimer
+@onready var grace_timer:Timer = $GraceTimer
 
 var room:Room = null
 
@@ -42,7 +43,7 @@ func _ready() -> void:
 	generate_map()
 
 func _process(delta: float) -> void:
-	hud.set_second_time(timer.time_left)
+	hud.set_second_time(int(timer.time_left),int(grace_timer.time_left),not(grace_timer.is_stopped()))
 
 # Populates subway map with the necessary TrainLines
 # Adds relevant transfers to all TrainLines
@@ -89,7 +90,7 @@ func game_won() -> void:
 func _on_minute_timer_timeout() -> void:
 	time_elapsed += 1
 	hud.set_minute_time(time_elapsed)
-	hud.set_second_time(int(timer.time_left))
+	hud.set_second_time(int(timer.time_left),grace_timer.time_left,not(grace_timer.is_stopped()))
 	if time_elapsed == TIME_LIMIT:
 		game_over()
 	for line in subway_map.values():
@@ -138,6 +139,7 @@ func change_room_platform(dest:String) -> void:
 	player.on_train = false
 	room.update_transfer_label(subway_map.get(player.get_line_name()),player.get_station_number())
 	check_platform_for_train()
+	activate_grace_time()
 
 func _on_start_button_pressed() -> void:
 	$Button.queue_free()
@@ -146,4 +148,12 @@ func _on_start_button_pressed() -> void:
 	$BGM_Player.play()
 	player.visible = true
 	change_room_platform(player.location[0])
+	
+func activate_grace_time() -> void:
+	timer.paused = true
+	grace_timer.start()
+
+func _on_grace_timer_timeout() -> void:
+	timer.paused = false
+	grace_timer.stop()
 	

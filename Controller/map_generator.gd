@@ -163,8 +163,8 @@ func generate() -> Dictionary:
 	# To account for the chance of a map with no set of valid endpoints
 	var num_of_attempts: = 0
 	const LOWER_TIME_BOUND:int = 20
-	const UPPER_TIME_BOUND:int = 40
-	while not(test_success) and num_of_attempts < 5:
+	const UPPER_TIME_BOUND:int = 30
+	while not(test_success) and num_of_attempts < 50:
 		num_of_attempts += 1
 		start_location = line_list.pick_random() + "-1"
 		goal_location = line_list.pick_random()
@@ -174,8 +174,6 @@ func generate() -> Dictionary:
 		test_success = LOWER_TIME_BOUND <= time_taken and UPPER_TIME_BOUND >= time_taken
 	# Tail recursion in case of failure
 	if not(test_success):
-		var zero = 0
-		zero = zero/zero
 		return generate()
 	# End of endpoint determination
 	return generate_from_pregen(line_list,transfer_dict,start_location,goal_location)
@@ -225,6 +223,8 @@ func strip_to_line_name(station:String) -> String:
 
 # Assumes starting point is a platform 1 of some variety
 func calculate_time_between_points(line_list:Array, transfer_list:Dictionary, start_pos:String, end_pos:String) -> int:
+	print("[map_gen] start_pos = ",start_pos,"\tend_pos = ",end_pos)
+	print("[map_gen] transfer_list = ",transfer_list)
 	var train_list:Array[Train] = []
 	for line in line_list:
 		train_list.append(Train.new(1,1,line))
@@ -236,16 +236,20 @@ func calculate_time_between_points(line_list:Array, transfer_list:Dictionary, st
 	var prev_pos_list:Array = []
 	while not(found_exit) and not(pos_list.is_empty()):
 		time += 1
+		#print("\n[map_gen] pos_list = ",pos_list)
 		for train in train_list:
-			var clean_pos_list: int = 0
+			var del_from_pos_list: Array = []
 			var add_to_pos_list:Array = []
 			#print("[map_gen] pos_list = ",pos_list)
 			#print("[map_gen] prev_pos_list = ",prev_pos_list,"\n")
+			#if time > 20:
+				#print("\n[map_gen] crnt train: ",train.get_position_name())
 			for pos in pos_list:
-				if pos[0] == train.get_position_name() and pos[1] == train.movement_increment:
+				if (pos[0] == train.get_position_name() and pos[1] == train.movement_increment):
 					# Move the pos
 					if prev_pos_list.find(strip_to_line_name(pos[0])+ "-" + str(int(pos[0].split("-")[2]) + pos[1])) != -1:
-						clean_pos_list += 1
+						#print("[map_gen] Already been to ",pos)
+						del_from_pos_list.append(pos)
 						pos = [null]
 					else:
 						prev_pos_list.append(pos[0])
@@ -254,24 +258,36 @@ func calculate_time_between_points(line_list:Array, transfer_list:Dictionary, st
 					if pos[0] != null and pos[0] == end_pos:
 						return time
 					# If the train needs to turn around, delete pos
-					if pos[0] != null and (int(pos[0].split("-")[2]) > color_string_to_enum(pos[0].split("-")[0]) or int(pos[0].split("-")[2]) < 0):
-						# pos = [null] is to mark that pos for deletion after the iteration
+					if pos[0] != null and ((int(pos[0].split("-")[2]) >= color_string_to_enum(pos[0].split("-")[0]) and pos[1] == 1) or (int(pos[0].split("-")[2]) <= 1 and pos[1] == -1)):
+						#print("[map_gen] Deleting pos")
+						del_from_pos_list.append(pos)
 						pos = [null]
-						clean_pos_list += 1
 					# If there is a transfer at this station, create 2 new pos
 					if pos[0] != null and get_station_transfer(transfer_list, pos[0]) != "":
-						print("[map_gen] get_station_transfer = ",get_station_transfer(transfer_list, pos[0]))
+						#print("[map_gen] get_station_transfer = ",get_station_transfer(transfer_list, pos[0]))
 						add_to_pos_list.append([get_station_transfer(transfer_list, pos[0]),1])
 						add_to_pos_list.append([add_to_pos_list.back()[0],-1])
-			while clean_pos_list > 0:
-				pos_list.remove_at(pos_list.find([null]))
-				clean_pos_list -= 1
+				elif int(pos[0].split("-")[2]) == color_string_to_enum(pos[0].split("-")[0]):
+					if pos[0] == end_pos:
+						return time
+					#print("[map_gen] Deleting pos ",pos)
+					#print("[map_gen] The string ",pos[0].split("-")[0], " turned into ",color_string_to_enum(pos[0].split("-")[0]), " and was compared to ",pos[0].split("-")[2],"\n")
+					del_from_pos_list.append(pos)
+					
+					
+			while not(del_from_pos_list.is_empty()):
+				#print("[map_gen] to be deleted: ",del_from_pos_list.front())
+				#print("[map_gen] pos list before deletion: ",pos_list)
+				pos_list.remove_at(pos_list.find(del_from_pos_list.pop_front()))
+				#print("[map_gen] pos list after deletion: ",pos_list)
 			while not(add_to_pos_list.is_empty()):
 				pos_list.append(add_to_pos_list.pop_front())
 			train.move_train()
-			if train.position == color_string_to_enum(train.train_line_name.split("-")[0]):
+			if train.position == color_string_to_enum(train.train_line_name.split("-")[0]) or train.position == 0:
 				train.turn_train_around()
-			
+	
+	print("[map_gen] found_goal = ",found_exit)
+	print("[map_gen] pos_list is empty = ",pos_list.is_empty())
 	return -1
 
 
@@ -287,14 +303,14 @@ func get_station_transfer(transfer_list:Dictionary, station:String) -> String:
 					return line + "-" + str(3 + (2 * transfer_ind))
 	return ""
 
-func check_balance(balance:int, x_list:Array, o_list:Array) -> bool:
-	if balance != x_list.size() - o_list.size():
-		printerr("[map_gen] balance currently incorrect: balance = ",balance,"\n x_list = ",x_list,"\n x_list length = ",x_list.size(),"\no_list = ",o_list,"\n o_list length = ",o_list.size())
-		var zero = 0
-		zero = zero/zero
-	#else:
-		#print("[map_gen] All clear on balance")
-	return balance == x_list.size() - o_list.size()
+#func check_balance(balance:int, x_list:Array, o_list:Array) -> bool:
+	#if balance != x_list.size() - o_list.size():
+		#printerr("[map_gen] balance currently incorrect: balance = ",balance,"\n x_list = ",x_list,"\n x_list length = ",x_list.size(),"\no_list = ",o_list,"\n o_list length = ",o_list.size())
+		#var zero = 0
+		#zero = zero/zero
+	##else:
+		##print("[map_gen] All clear on balance")
+	#return balance == x_list.size() - o_list.size()
 
 func set_balance(x_list:Array,o_list:Array) -> int:
 	return x_list.size() - o_list.size()

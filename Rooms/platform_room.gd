@@ -53,6 +53,7 @@ func change_platform_label(plat:int,train:Train=null) -> void:
 func update_transfer_label(train_line:Train_Line,pos:int) -> void:
 	$Station_Label.text = "Current Station: " + train_line.name + "-" + str(pos)
 	var t_list:String = "Transfer List:\n" + train_line.name
+	#print("[platform_room] train line transfer list ",train_line.transfer_list)
 	if train_line.transfer_list[pos] != "None":
 		var temp_str_list := train_line.transfer_list[pos].split("-")
 		t_list += "\n" + temp_str_list[0] + "-" + temp_str_list[1]

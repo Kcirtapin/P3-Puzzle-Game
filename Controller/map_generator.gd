@@ -162,15 +162,15 @@ func generate() -> Dictionary:
 	test_success = false
 	# To account for the chance of a map with no set of valid endpoints
 	var num_of_attempts: = 0
-	const LOWER_TIME_BOUND:int = 20
-	const UPPER_TIME_BOUND:int = 30
+	const LOWER_TIME_BOUND:int = 15
+	const UPPER_TIME_BOUND:int = 25
 	while not(test_success) and num_of_attempts < 50:
 		num_of_attempts += 1
 		start_location = line_list.pick_random() + "-1"
 		goal_location = line_list.pick_random()
 		goal_location = goal_location + "-" + str(color_string_to_enum(goal_location.split("-")[0]))
 		var time_taken:int = calculate_time_between_points(line_list,transfer_dict,start_location,goal_location)
-		print("[map_gen] time_taken = ",time_taken)
+		#print("[map_gen] time_taken = ",time_taken)
 		test_success = LOWER_TIME_BOUND <= time_taken and UPPER_TIME_BOUND >= time_taken
 	# Tail recursion in case of failure
 	if not(test_success):
@@ -182,15 +182,7 @@ func generate_from_pregen(map_data:Array, transfer_data:Dictionary, start:String
 	var out_map:Dictionary[String,Train_Line] = {}
 	for line in map_data:
 		var new_line = Train_Line.new()
-		var line_size: int = 0
-		if line.split("-")[0] == "Green":
-			line_size = color_to_size.GREEN
-		elif line.split("-")[0] == "Blue":
-			line_size = color_to_size.BLUE
-		elif line.split("-")[0] == "Red":
-			line_size = color_to_size.RED
-		elif line.split("-")[0] == "Black":
-			line_size = color_to_size.BLACK
+		var line_size: int = color_string_to_enum(line.split("-")[0])
 		new_line.init(line_size, line)
 		var transfer_location:int = 1
 		if line.split("-")[1] == "O":
@@ -223,8 +215,8 @@ func strip_to_line_name(station:String) -> String:
 
 # Assumes starting point is a platform 1 of some variety
 func calculate_time_between_points(line_list:Array, transfer_list:Dictionary, start_pos:String, end_pos:String) -> int:
-	print("[map_gen] start_pos = ",start_pos,"\tend_pos = ",end_pos)
-	print("[map_gen] transfer_list = ",transfer_list)
+	#print("[map_gen] start_pos = ",start_pos,"\tend_pos = ",end_pos)
+	#print("[map_gen] transfer_list = ",transfer_list)
 	var train_list:Array[Train] = []
 	for line in line_list:
 		train_list.append(Train.new(1,1,line))
@@ -286,8 +278,8 @@ func calculate_time_between_points(line_list:Array, transfer_list:Dictionary, st
 			if train.position == color_string_to_enum(train.train_line_name.split("-")[0]) or train.position == 0:
 				train.turn_train_around()
 	
-	print("[map_gen] found_goal = ",found_exit)
-	print("[map_gen] pos_list is empty = ",pos_list.is_empty())
+	#print("[map_gen] found_goal = ",found_exit)
+	#print("[map_gen] pos_list is empty = ",pos_list.is_empty())
 	return -1
 
 

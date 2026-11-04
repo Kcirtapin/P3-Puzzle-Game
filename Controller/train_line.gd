@@ -13,6 +13,7 @@ func init(s:int, n:String) -> void:
 	size = s
 	for t in size + 1:
 		transfer_list.append("None")
+	#print("[train line] train line transfer list ",transfer_list)
 	#Start trains at opposite ends
 	train_list = []
 	train_list.append(Train.new(1,1,name))

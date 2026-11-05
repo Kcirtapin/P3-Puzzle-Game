@@ -1,8 +1,8 @@
-# Project 4: My Amazing P4
+# Project 4: One Stop Short
 
-![Godot Version](https://img.shields.io/badge/Godot-4.x-blue?logo=godot-
-engine&logoColor=white)
+![Godot Version](https://img.shields.io/badge/Godot-4.x-blue?logo=godot-engine&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-PC%20/%20Web-green)
+
 **Developed by:**
 
 - **[Patrick Breslin]** _Sole Developer_
@@ -15,16 +15,17 @@ You’re lost in an unfamiliar subway and about to be late. You must use deducti
 ## How to Play
 
 - **Play in Browser:** [Click here to play on
-  itch.io](https://procyon40.itch.io/subway-explorer)
+  itch.io](https://procyon40.itch.io/one-stop-short)
 
 ---
 
 ### Asset Credits & Attributions
 
-- **Visual Assets:**
+**Visual Assets:**
 - Crowd image from https://clipground.com/the-crowd-clipart.html
 - All other art made by me
-- **Music**
+  
+**Music**
 - "Game 8" from Mindustry (https://www.youtube.com/watch?v=z9pnhTYQ88w)
 
 ---
